@@ -9,7 +9,7 @@ from logger import get_logger
 log = get_logger(__file__)
 
 
-class TransactionancestrySet:
+class TransactionAncestrySet:
     def __init__(self, block_height, num=10):
         self.__height = block_height
         self.__num_transactions = num
@@ -81,6 +81,7 @@ class TransactionancestrySet:
 
 
 if __name__ == "__main__":
-    tas = TransactionancestrySet(680000)
+    block_height = 680000
+    tas = TransactionAncestrySet(block_height)
     top_transactions = tas.get_top_transactions()
     log.info(json.dumps(top_transactions))
