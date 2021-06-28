@@ -18,7 +18,7 @@ class TransactionancestrySet:
         self.__transaction_info = defaultdict(dict)
         self.__ancestry_sets = defaultdict(set)
 
-    def get_block_hash(self):
+    def __get_block_hash(self):
         url = (BASE_URL + ENDPOINTS["GET_BLOCK_FROM_HEIGHT"]).replace(":height", str(self.__height))
         response = requests.get(url)
         if 200 <= response.status_code < 300:
@@ -28,7 +28,7 @@ class TransactionancestrySet:
             log.error(f"Error while fetching block hash for {self.__height = }")
             raise Exception("Error while fetching block hash")
 
-    def get_transactions_for_block(self):
+    def __get_transactions_for_block(self):
         url = (BASE_URL + ENDPOINTS["GET_BLOCK_TRANSACTIONS_ALL"]).replace(":hash", str(self.__hash))
         response = requests.get(url)
         if 200 <= response.status_code < 300:
@@ -52,7 +52,7 @@ class TransactionancestrySet:
             raise Exception("Error while fetching tx details")
         return self.__transaction_info[txid]
 
-    def prepare_ancestry_sets(self):
+    def __prepare_ancestry_sets(self):
         # for txid in self.__transactions:
         # Processing only 10 tx for testing/development
         for txid in list(self.__transactions)[0:10]:
@@ -72,9 +72,9 @@ class TransactionancestrySet:
         return set_sizes
 
     def get_top_transactions(self, *args, **kwargs):
-        self.get_block_hash()
-        self.get_transactions_for_block()
-        self.prepare_ancestry_sets()
+        self.__get_block_hash()
+        self.__get_transactions_for_block()
+        self.__prepare_ancestry_sets()
         num_transactions = kwargs.get("num_transactions") if kwargs.get("num_transactions") else self.__num_transactions
         top_tx = self.__find_top_transactions(num_transactions)
         return top_tx
