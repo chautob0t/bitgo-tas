@@ -30,3 +30,4 @@ class DFS:
         for vertex in self.vertices:
             # Find all ancestors for each vertex in graph
             self.__find_all_ancestors(vertex, [])
+        return self.all_ancestors

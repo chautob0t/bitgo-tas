@@ -4,6 +4,7 @@ from collections import defaultdict
 import requests
 
 from constants import BASE_URL, ENDPOINTS
+from ancestry_helper import DFS
 from logger import get_logger
 
 log = get_logger(__file__)
@@ -69,7 +70,8 @@ class TransactionAncestrySet:
         # Create a graph of transactions
         # For each transaction perform DFS and keep adding the visited nodes to the ancestry set of the transaction
         # While checking that ancestors are part of the same block
-        return NotImplementedError
+        dfs = DFS(self.__transactions, self.__ancestry_sets)
+        self.__ancestry_sets = dfs.find_all_ancestors()
 
     def __find_top_transactions(self, num_transactions):
         set_sizes = []
