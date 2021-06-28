@@ -1,3 +1,4 @@
+import json
 from collections import defaultdict
 
 import requests
@@ -64,18 +65,22 @@ class TransactionancestrySet:
                     self.__ancestry_sets[txid].add(tx_in_id)
 
     def __find_top_transactions(self, num_transactions):
-        print(list(self.__ancestry_sets))
-        return (list(self.__ancestry_sets)).sort(key=lambda x: len(x), reverse=True)[0:num_transactions]
+        set_sizes = []
+        for key, value in self.__ancestry_sets.items():
+            set_sizes.append({"txid": key, "ancestors": len(value)})
+        set_sizes.sort(key=lambda x: x.get("ancestors", 0), reverse=True)
+        return set_sizes
 
     def get_top_transactions(self, *args, **kwargs):
         self.get_block_hash()
         self.get_transactions_for_block()
         self.prepare_ancestry_sets()
         num_transactions = kwargs.get("num_transactions") if kwargs.get("num_transactions") else self.__num_transactions
-        return self.__find_top_transactions(num_transactions)
+        top_tx = self.__find_top_transactions(num_transactions)
+        return top_tx
 
 
 if __name__ == "__main__":
     tas = TransactionancestrySet(680000)
     top_transactions = tas.get_top_transactions()
-    # log.info(json.dumps(top_transactions))
+    log.info(json.dumps(top_transactions))
