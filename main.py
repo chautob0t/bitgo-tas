@@ -64,6 +64,13 @@ class TransactionAncestrySet:
                 if tx_in_id not in self.__transactions:
                     self.__ancestry_sets[txid].add(tx_in_id)
 
+    def __update_ancestory_sets(self):
+        # Update the related ancestors for each transaction
+        # Create a graph of transactions
+        # For each transaction perform DFS and keep adding the visited nodes to the ancestry set of the transaction
+        # While checking that ancestors are part of the same block
+        return NotImplementedError
+
     def __find_top_transactions(self, num_transactions):
         set_sizes = []
         for key, value in self.__ancestry_sets.items():
